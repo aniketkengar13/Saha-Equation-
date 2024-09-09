@@ -1,1 +1,1 @@
-# Saha-Equation-
+# Saha-Equations-
