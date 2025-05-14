@@ -1,0 +1,53 @@
+import math
+
+def get_positive_float(prompt):
+    """Get a positive float number from user input"""
+    while True:
+        try:
+            value = float(input(prompt))
+            if value <= 0:
+                print("Please enter a positive number!")
+                continue
+            return value
+        except ValueError:
+            print("Invalid input! Please enter a number.")
+
+def calculate_ionization_fraction():
+    # Physical constants
+   # Planck's constant (J·s)
+h = 6.62607015e-34  
+# Boltzmann's constant (J/K)
+    k = 1.380649e-23   
+ # Electron mass (kg)
+
+    m_e = 9.10938356e-31    
+ # 1 eV in joules
+    eV_to_J = 1.602176634e-19 
+
+    print("\n=== Saha Equation Calculator ===")
+    print("Enter plasma parameters:")
+
+    # Get user inputs with validation
+    T = get_positive_float("Temperature (K): ")
+    E_eV = get_positive_float("Ionization energy (eV): ")
+    n_total = get_positive_float("Total density (m⁻³): ")
+
+    # Convert ionization energy to joules
+    E_J = E_eV * eV_to_J
+
+    # Calculate Saha equation components
+    exponent = -E_J / (k * T)
+    coeff = (2 * math.pi * m_e * k * T)**(1.5) / h**3
+    rhs = (coeff * math.exp(exponent)) / n_total
+
+    # Solve quadratic equation x^2 + rhs*x - rhs = 0
+    C = rhs
+    discriminant = math.sqrt(C**2 + 4*C)
+    x = (-C + discriminant) / 2
+
+    # Display result
+    print(f"\nIonization Fraction: {x:.4f} ({x*100:.2f}%)")
+
+if __name__ == "__main__":
+    calculate_ionization_fraction()
+    input("\nPress Enter to exit...")
