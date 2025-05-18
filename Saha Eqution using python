@@ -1,1 +1,90 @@
-#
+import tkinter as tk
+from tkinter import ttk
+import math
+
+# Physical constants
+
+
+# Planck's constant (J·s)
+h = 6.62607015e-34    
+
+# Boltzmann's constant (J/K)   
+k = 1.380649e-23         
+
+# Electron mass (kg)
+m_e = 9.10938356e-31     
+
+# 1 eV in joules
+eV_to_J = 1.602176634e-19  
+
+def calculate_saha():
+    try:
+        # Get values from entries
+       # Temperature in Kelvin
+ T = float(temp_entry.get())          
+       # Ionization energy in eV
+ E_eV = float(ion_energy_entry.get()) 
+        # Total density in m^-3
+n_total = float(density_entry.get()) 
+        
+        if T <= 0 or n_total <= 0 or E_eV <= 0:
+            raise ValueError("Values must be positive")
+        
+        # Convert ionization energy to joules
+        E_J = E_eV * eV_to_J
+        
+        # Calculate Saha equation components
+        exponent = -E_J / (k * T)
+        coeff = (2 * math.pi * m_e * k * T)**(1.5) / h**3
+        rhs = (coeff * math.exp(exponent)) / n_total
+        
+        # Solve quadratic equation x^2 + rhs*x - rhs = 0
+        C = rhs
+        discriminant = math.sqrt(C**2 + 4*C)
+        x = (-C + discriminant) / 2
+        
+        # Display result
+        result_label.config(text=f"Ionization Fraction: {x:.4f} ({x*100:.2f}%)")
+        
+    except ValueError as e:
+        result_label.config(text=f"Error: {str(e)}")
+
+# Create main window
+root = tk.Tk()
+root.title("Saha Equation Calculator")
+root.geometry("400x250")
+
+# Create input frame
+input_frame = ttk.Frame(root, padding="10")
+input_frame.pack(fill='x')
+
+# Temperature input
+ttk.Label(input_frame, text="Temperature (K):").grid(row=0, column=0, sticky='w')
+temp_entry = ttk.Entry(input_frame)
+temp_entry.grid(row=0, column=1, sticky='ew')
+temp_entry.insert(0, "10000")  # Default value
+
+# Ionization energy input
+ttk.Label(input_frame, text="Ionization Energy (eV):").grid(row=1, column=0, sticky='w')
+ion_energy_entry = ttk.Entry(input_frame)
+ion_energy_entry.grid(row=1, column=1, sticky='ew')
+ion_energy_entry.insert(0, "13.6")  # Hydrogen ionization energy
+
+# Density input
+ttk.Label(input_frame, text="Total Density (m⁻³):").grid(row=2, column=0, sticky='w')
+density_entry = ttk.Entry(input_frame)
+density_entry.grid(row=2, column=1, sticky='ew')
+density_entry.insert(0, "1e24")
+
+# Calculate button
+calculate_btn = ttk.Button(root, text="Calculate", command=calculate_saha)
+calculate_btn.pack(pady=10)
+
+# Result label
+result_label = ttk.Label(root, text="Result will be shown here")
+result_label.pack()
+
+# Configure grid weights
+input_frame.columnconfigure(1, weight=1)
+
+root.mainloop()
