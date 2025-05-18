@@ -5,7 +5,7 @@ import math
 # Physical constants
 
 
-# Planck's constant (J·s)
+# Planck's constant (J·s)			
 h = 6.62607015e-34    
 
 # Boltzmann's constant (J/K)   
