@@ -3,12 +3,17 @@ from tkinter import ttk
 import math
 
 # Physical constants
+
+
 # Planck's constant (J·s)
 h = 6.62607015e-34    
+
 # Boltzmann's constant (J/K)   
 k = 1.380649e-23         
+
 # Electron mass (kg)
 m_e = 9.10938356e-31     
+
 # 1 eV in joules
 eV_to_J = 1.602176634e-19  
 
